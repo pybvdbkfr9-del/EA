@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Electric Avenue Festival - Full Schedule</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px;
+            min-height: 100vh;
+        }
+
+        .page-container {
+            max-width: 100%;
+        }
+
+        .day-section {
+            margin-bottom: 12px;
+        }
+
+        .toggle-button {
+            width: 100%;
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-button:active {
+            transform: scale(0.98);
+        }
+
+        .toggle-button .arrow {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-button.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 100%;
+            margin-top: 8px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .container.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .day-label {
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0.95;
+        }
+
+        .header .date {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: left;
+            font-weight: bold;
+            font-size: 9px;
+            line-height: 1.3;
+        }
+
+        .header .location {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: right;
+            font-weight: bold;
+            font-size: 9px;
+            line-height: 1.3;
+        }
+
+        .schedule-container {
+            display: flex;
+            background: #f8f9fa;
+        }
+
+        .time-column {
+            width: 35px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .time-header {
+            padding: 8px 2px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            background: white;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-slot {
+            padding: 5px 2px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 9px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stages-container {
+            flex: 1;
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .stage-column {
+            flex: 1;
+            border-right: 1px solid #e0e0e0;
+            position: relative;
+            min-width: 55px;
+        }
+
+        .stage-column:last-child {
+            border-right: none;
+        }
+
+        .stage-header {
+            background: white;
+            padding: 4px 2px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 7px;
+            border-bottom: 1px solid #e0e0e0;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.1;
+            word-break: break-word;
+        }
+
+        .stage-content {
+            position: relative;
+        }
+
+        .stage-content.friday {
+            height: 540px; /* 9 hours × 60px */
+        }
+
+        .stage-content.saturday {
+            height: 600px; /* 10 hours × 60px */
+        }
+
+        .performance {
+            position: absolute;
+            left: 0;
+            right: 0;
+            padding: 4px 2px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .artist-name {
+            font-weight: bold;
+            font-size: 7.5px;
+            margin-bottom: 2px;
+            color: #000000;
+            line-height: 1.1;
+            word-break: break-word;
+            hyphens: auto;
+        }
+
+        .time-display {
+            font-size: 6.5px;
+            color: #000000;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+
+        .electric-stage { background: #fbbf24; }
+        .park-stage { background: #6ee7b7; }
+        .hangar-stage { background: #f472b6; }
+        .cosmic-stage { background: #7dd3fc; }
+        .circo-stage { background: #c084fc; }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- FRIDAY SECTION -->
+        <div class="day-section">
+            <button class="toggle-button" id="fridayToggle">
+                <span>Friday, February 27th</span>
+                <span class="arrow">▼</span>
+            </button>
+            <div class="container" id="fridaySchedule">
+                <div class="header">
+                    <div class="date">FEB 2026<br>27-28TH</div>
+                    <h1>Electric Avenue</h1>
+                    <div class="day-label">Friday</div>
+                    <div class="location">HAGLEY<br>CHCH</div>
+                </div>
+
+                <div class="schedule-container">
+                    <!-- Time Column -->
+                    <div class="time-column">
+                        <div class="time-header">Fri</div>
+                        <div class="time-slot">2pm</div>
+                        <div class="time-slot">3pm</div>
+                        <div class="time-slot">4pm</div>
+                        <div class="time-slot">5pm</div>
+                        <div class="time-slot">6pm</div>
+                        <div class="time-slot">7pm</div>
+                        <div class="time-slot">8pm</div>
+                        <div class="time-slot">9pm</div>
+                        <div class="time-slot">10pm</div>
+                    </div>
+
+                    <!-- Stages Container -->
+                    <div class="stages-container">
+                        <!-- Electric Stage -->
+                        <div class="stage-column">
+                            <div class="stage-header">Electric</div>
+                            <div class="stage-content friday">
+                                <div class="performance electric-stage" style="top: 30px; height: 45px;">
+                                    <div class="artist-name">Mim Jensen</div>
+                                    <div class="time-display">2:30-3:15</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 95px; height: 70px;">
+                                    <div class="artist-name">Corrella</div>
+                                    <div class="time-display">3:35-4:45</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 215px; height: 70px;">
+                                    <div class="artist-name">L.A.B</div>
+                                    <div class="time-display">5:35-6:45</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 360px; height: 80px;">
+                                    <div class="artist-name">Split Enz</div>
+                                    <div class="time-display">8:00-9:20</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Park Stage -->
+                        <div class="stage-column">
+                            <div class="stage-header">Park</div>
+                            <div class="stage-content friday">
+                                <div class="performance park-stage" style="top: 75px; height: 45px;">
+                                    <div class="artist-name">Frankie Venter</div>
+                                    <div class="time-display">3:15-4:00</div>
+                                </div>
+                                <div class="performance park-stage" style="top: 155px; height: 60px;">
+                                    <div class="artist-name">Super-groove</div>
+                                    <div class="time-display">4:35-5:35</div>
+                                </div>
+                                <div class="performance park-stage" style="top: 280px; height: 80px;">
+                                    <div class="artist-name">The Streets</div>
+                                    <div class="time-display">6:40-8:00</div>
+                                </div>
+                                <div class="performance park-stage" style="top: 440px; height: 70px;">
+                                    <div class="artist-name">Becky Hill</div>
+                                    <div class="time-display">9:20-10:30</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Hangar -->
+                        <div class="stage-column">
+                            <div class="stage-header">Hangar</div>
+                            <div class="stage-content friday">
+                                <div class="performance hangar-stage" style="top: 45px; height: 45px;">
+                                    <div class="artist-name">Pool House</div>
+                                    <div class="time-display">2:45-3:30</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 110px; height: 60px;">
+                                    <div class="artist-name">Drax Project</div>
+                                    <div class="time-display">3:50-4:50</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 195px; height: 60px;">
+                                    <div class="artist-name">Maverick Sabre</div>
+                                    <div class="time-display">5:15-6:15</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 265px; height: 60px;">
+                                    <div class="artist-name">Disco Lines</div>
+                                    <div class="time-display">6:25-7:25</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 335px; height: 70px;">
+                                    <div class="artist-name">Sammy Virji</div>
+                                    <div class="time-display">7:35-8:45</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 435px; height: 75px;">
+                                    <div class="artist-name">Base-ment Jaxx</div>
+                                    <div class="time-display">9:15-10:30</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cosmic Palace -->
+                        <div class="stage-column">
+                            <div class="stage-header">Cosmic</div>
+                            <div class="stage-content friday">
+                                <div class="performance cosmic-stage" style="top: 90px; height: 50px;">
+                                    <div class="artist-name">Bret McKen-zie & State HW</div>
+                                    <div class="time-display">3:30-4:20</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 160px; height: 60px;">
+                                    <div class="artist-name">LEISURE</div>
+                                    <div class="time-display">4:40-5:40</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 240px; height: 60px;">
+                                    <div class="artist-name">Sudan Archives</div>
+                                    <div class="time-display">6:00-7:00</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 325px; height: 60px;">
+                                    <div class="artist-name">Obong-jayar</div>
+                                    <div class="time-display">7:25-8:25</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 390px; height: 60px;">
+                                    <div class="artist-name">SUUNE</div>
+                                    <div class="time-display">8:30-9:30</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Circo Disco -->
+                        <div class="stage-column">
+                            <div class="stage-header">Circo</div>
+                            <div class="stage-content friday">
+                                <div class="performance circo-stage" style="top: 60px; height: 60px;">
+                                    <div class="artist-name">Dream.R</div>
+                                    <div class="time-display">3:00-4:00</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 120px; height: 60px;">
+                                    <div class="artist-name">Kennedy</div>
+                                    <div class="time-display">4:00-5:00</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 180px; height: 60px;">
+                                    <div class="artist-name">Frank Booker</div>
+                                    <div class="time-display">5:00-6:00</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 240px; height: 60px;">
+                                    <div class="artist-name">Tim Phin</div>
+                                    <div class="time-display">6:00-7:00</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 300px; height: 80px;">
+                                    <div class="artist-name">Dick Johnson & Ribera</div>
+                                    <div class="time-display">7:00-8:20</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 380px; height: 75px;">
+                                    <div class="artist-name">Communicate</div>
+                                    <div class="time-display">8:20-9:35</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SATURDAY SECTION -->
+        <div class="day-section">
+            <button class="toggle-button" id="saturdayToggle">
+                <span>Saturday, February 28th</span>
+                <span class="arrow">▼</span>
+            </button>
+            <div class="container" id="saturdaySchedule">
+                <div class="header">
+                    <div class="date">FEB 2026<br>27-28TH</div>
+                    <h1>Electric Avenue</h1>
+                    <div class="day-label">Saturday</div>
+                    <div class="location">HAGLEY<br>CHCH</div>
+                </div>
+
+                <div class="schedule-container">
+                    <!-- Time Column -->
+                    <div class="time-column">
+                        <div class="time-header">Sat</div>
+                        <div class="time-slot">2pm</div>
+                        <div class="time-slot">3pm</div>
+                        <div class="time-slot">4pm</div>
+                        <div class="time-slot">5pm</div>
+                        <div class="time-slot">6pm</div>
+                        <div class="time-slot">7pm</div>
+                        <div class="time-slot">8pm</div>
+                        <div class="time-slot">9pm</div>
+                        <div class="time-slot">10pm</div>
+                        <div class="time-slot">11pm</div>
+                    </div>
+
+                    <!-- Stages Container -->
+                    <div class="stages-container">
+                        <!-- Electric Stage -->
+                        <div class="stage-column">
+                            <div class="stage-header">Electric</div>
+                            <div class="stage-content saturday">
+                                <div class="performance electric-stage" style="top: 0px; height: 40px;">
+                                    <div class="artist-name">Caitlin</div>
+                                    <div class="time-display">2:00-2:40</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 85px; height: 55px;">
+                                    <div class="artist-name">No Cigar</div>
+                                    <div class="time-display">3:25-4:20</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 200px; height: 60px;">
+                                    <div class="artist-name">Royal Otis</div>
+                                    <div class="time-display">5:20-6:20</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 330px; height: 60px;">
+                                    <div class="artist-name">Kesha</div>
+                                    <div class="time-display">7:30-8:30</div>
+                                </div>
+                                <div class="performance electric-stage" style="top: 465px; height: 90px;">
+                                    <div class="artist-name">Dom Dolla</div>
+                                    <div class="time-display">9:45-11:15</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Park Stage -->
+                        <div class="stage-column">
+                            <div class="stage-header">Park</div>
+                            <div class="stage-content saturday">
+                                <div class="performance park-stage" style="top: 40px; height: 45px;">
+                                    <div class="artist-name">There's A</div>
+                                    <div class="time-display">2:40-3:25</div>
+                                </div>
+                                <div class="performance park-stage" style="top: 140px; height: 60px;">
+                                    <div class="artist-name">Kora</div>
+                                    <div class="time-display">4:20-5:20</div>
+                                </div>
+                                <div class="performance park-stage" style="top: 260px; height: 70px;">
+                                    <div class="artist-name">Ocean Alley</div>
+                                    <div class="time-display">6:20-7:30</div>
+                                </div>
+                                <div class="performance park-stage" style="top: 390px; height: 70px;">
+                                    <div class="artist-name">Pendulum</div>
+                                    <div class="time-display">8:30-9:40</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Hangar -->
+                        <div class="stage-column">
+                            <div class="stage-header">Hangar</div>
+                            <div class="stage-content saturday">
+                                <div class="performance hangar-stage" style="top: 0px; height: 45px;">
+                                    <div class="artist-name">Danica Bryant</div>
+                                    <div class="time-display">2:00-2:45</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 85px; height: 60px;">
+                                    <div class="artist-name">Isaac Chambers & Dub Princess</div>
+                                    <div class="time-display">3:25-4:25</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 165px; height: 60px;">
+                                    <div class="artist-name">Jalen Ngonda</div>
+                                    <div class="time-display">4:45-5:45</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 235px; height: 60px;">
+                                    <div class="artist-name">Sannoi</div>
+                                    <div class="time-display">5:55-6:55</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 325px; height: 70px;">
+                                    <div class="artist-name">Leftfield</div>
+                                    <div class="time-display">7:25-8:35</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 405px; height: 60px;">
+                                    <div class="artist-name">Peking Duk</div>
+                                    <div class="time-display">8:45-9:45</div>
+                                </div>
+                                <div class="performance hangar-stage" style="top: 470px; height: 70px;">
+                                    <div class="artist-name">Flowdus</div>
+                                    <div class="time-display">9:50-11:00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cosmic Palace -->
+                        <div class="stage-column">
+                            <div class="stage-header">Cosmic</div>
+                            <div class="stage-content saturday">
+                                <div class="performance cosmic-stage" style="top: 50px; height: 45px;">
+                                    <div class="artist-name">Good-will</div>
+                                    <div class="time-display">2:50-3:35</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 115px; height: 60px;">
+                                    <div class="artist-name">Fazer-daze</div>
+                                    <div class="time-display">3:55-4:55</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 195px; height: 60px;">
+                                    <div class="artist-name">Don West</div>
+                                    <div class="time-display">5:15-6:15</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 270px; height: 60px;">
+                                    <div class="artist-name">Dub FX & Tiki Taane</div>
+                                    <div class="time-display">6:30-7:30</div>
+                                </div>
+                                <div class="performance cosmic-stage" style="top: 350px; height: 60px;">
+                                    <div class="artist-name">Pirapus</div>
+                                    <div class="time-display">7:50-8:50</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Circo Disco -->
+                        <div class="stage-column">
+                            <div class="stage-header">Circo</div>
+                            <div class="stage-content saturday">
+                                <div class="performance circo-stage" style="top: 0px; height: 75px;">
+                                    <div class="artist-name">Craigs-list</div>
+                                    <div class="time-display">2:00-3:15</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 75px; height: 60px;">
+                                    <div class="artist-name">TWO-MINDS</div>
+                                    <div class="time-display">3:15-4:15</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 135px; height: 60px;">
+                                    <div class="artist-name">Flamingo Pier</div>
+                                    <div class="time-display">4:15-5:15</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 195px; height: 60px;">
+                                    <div class="artist-name">Ryan Salt</div>
+                                    <div class="time-display">5:15-6:15</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 255px; height: 75px;">
+                                    <div class="artist-name">Pyre and Aragorn</div>
+                                    <div class="time-display">6:15-7:30</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 330px; height: 75px;">
+                                    <div class="artist-name">Sin & Brook</div>
+                                    <div class="time-display">7:30-8:45</div>
+                                </div>
+                                <div class="performance circo-stage" style="top: 405px; height: 60px;">
+                                    <div class="artist-name">Greg Churchill</div>
+                                    <div class="time-display">8:45-9:45</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle functionality
+        document.getElementById('fridayToggle').addEventListener('click', function() {
+            const schedule = document.getElementById('fridaySchedule');
+            const button = this;
+            
+            if (schedule.classList.contains('show')) {
+                schedule.classList.remove('show');
+                button.classList.remove('active');
+            } else {
+                schedule.classList.add('show');
+                button.classList.add('active');
+            }
+        });
+
+        document.getElementById('saturdayToggle').addEventListener('click', function() {
+            const schedule = document.getElementById('saturdaySchedule');
+            const button = this;
+            
+            if (schedule.classList.contains('show')) {
+                schedule.classList.remove('show');
+                button.classList.remove('active');
+            } else {
+                schedule.classList.add('show');
+                button.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
